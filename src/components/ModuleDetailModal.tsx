@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import {
   BookOpen,
   Check,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type { ModuleItem } from '@/data/curriculum';
 import type { QuizResult } from '@/hooks/useProgress';
+import { lockBodyScroll } from '@/lib/scrollLock';
 
 type TabId = 'analogi' | 'materi' | 'kode' | 'kuis';
 
@@ -49,18 +50,25 @@ export default function ModuleDetailModal({
   const [tab, setTab] = useState<TabId>('analogi');
   const [copied, setCopied] = useState(false);
 
+  const isPresent = useIsPresent();
+  const onCloseRef = useRef(onClose);
+  const pressedOnBackdrop = useRef(false);
+
   useEffect(() => {
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    const unlock = lockBodyScroll();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') onCloseRef.current();
     };
     window.addEventListener('keydown', onKey);
     return () => {
-      document.body.style.overflow = previous;
       window.removeEventListener('keydown', onKey);
+      unlock();
     };
-  }, [onClose]);
+  }, []);
 
   const handleCopy = async () => {
     try {
@@ -77,17 +85,24 @@ export default function ModuleDetailModal({
       className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/80 backdrop-blur-sm sm:items-center sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
+      exit={{ opacity: 0, transition: { duration: 0.18 } }}
+      style={{ pointerEvents: isPresent ? 'auto' : 'none' }}
+      onPointerDown={(event) => {
+        pressedOnBackdrop.current = event.target === event.currentTarget;
+      }}
+      onClick={(event) => {
+        const shouldClose = pressedOnBackdrop.current && event.target === event.currentTarget;
+        pressedOnBackdrop.current = false;
+        if (shouldClose) onClose();
+      }}
     >
       <motion.div
         role="dialog"
         aria-modal="true"
         initial={{ y: 60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 60, opacity: 0 }}
+        exit={{ y: 60, opacity: 0, transition: { duration: 0.18 } }}
         transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-        onClick={(event) => event.stopPropagation()}
         className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-t-3xl border border-slate-800 bg-slate-900 sm:rounded-3xl"
       >
         <div className={`h-1.5 w-full bg-gradient-to-r ${item.accentColor}`} />

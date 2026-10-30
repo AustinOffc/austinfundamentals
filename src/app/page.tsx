@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, SearchX } from 'lucide-react';
 import { CURRICULUM_DATA, type LevelType } from '@/data/curriculum';
@@ -45,6 +45,8 @@ export default function Home() {
       return haystack.includes(keyword);
     });
   }, [filter, query]);
+
+  const closeModal = useCallback(() => setOpenId(null), []);
 
   const openItem = CURRICULUM_DATA.find((item) => item.id === openId) ?? null;
 
@@ -125,7 +127,7 @@ export default function Home() {
             onToggle={progress.toggleTopic}
             onAnswer={(selected) => progress.answerQuiz(openItem.id, selected, openItem.quiz.correctIndex)}
             onRetry={() => progress.retryQuiz(openItem.id)}
-            onClose={() => setOpenId(null)}
+            onClose={closeModal}
           />
         )}
       </AnimatePresence>
