@@ -8,6 +8,7 @@ interface NavbarProps {
 }
 
 const LINKS = [
+  { href: '#vibe-coding', label: 'Kenapa Fondasi?' },
   { href: '#kurikulum', label: 'Kurikulum' },
   { href: '#tahapan', label: 'Tahapan Belajar' },
   { href: '#hasil', label: 'Hasil Akhir' }
@@ -27,7 +28,7 @@ export default function Navbar({ percent, onReset }: NavbarProps) {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-fuchsia-500">
             <BrainCircuit className="h-5 w-5 text-slate-950" />
           </span>
-          <span className="text-sm font-bold tracking-tight text-white sm:text-base">AI Engineer Fundamentals</span>
+          <span className="text-sm font-bold tracking-tight text-white sm:text-base">RVC <span className="hidden font-medium text-slate-400 sm:inline">· Ruang Vibe Coders</span></span>
         </a>
         <nav className="hidden items-center gap-6 md:flex">
           {LINKS.map((link) => (

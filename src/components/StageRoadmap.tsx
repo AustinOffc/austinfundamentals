@@ -2,22 +2,22 @@
 
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
-import { LEARNING_STAGES } from '@/data/curriculum';
+import type { TrackInfo } from '@/data/curriculum';
 import { STAGE_STYLES } from '@/lib/icons';
 
-export default function StageRoadmap() {
+export default function StageRoadmap({ track }: { track: TrackInfo }) {
   return (
     <section id="tahapan" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-16">
       <div className="mb-10 text-center">
-        <h2 className="text-2xl font-bold text-white sm:text-3xl">Tahapan Belajar</h2>
-        <p className="mt-2 text-slate-400">Ikuti alur ini dari level pemula sampai senior.</p>
+        <h2 className="text-2xl font-bold text-white sm:text-3xl">Tahapan Belajar: {track.label}</h2>
+        <p className="mt-2 text-slate-400">{track.description}</p>
       </div>
       <div className="grid gap-4 md:grid-cols-4">
-        {LEARNING_STAGES.map((stage, index) => {
-          const style = STAGE_STYLES[index];
+        {track.stages.map((stage, index) => {
+          const style = STAGE_STYLES[index % STAGE_STYLES.length];
           return (
             <motion.div
-              key={stage.step}
+              key={`${track.id}-${stage.step}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
@@ -30,9 +30,7 @@ export default function StageRoadmap() {
                 >
                   {stage.step}
                 </span>
-                {index < LEARNING_STAGES.length - 1 && (
-                  <ChevronRight className={`hidden h-6 w-6 md:block ${style.text}`} />
-                )}
+                {index < track.stages.length - 1 && <ChevronRight className={`hidden h-6 w-6 md:block ${style.text}`} />}
               </div>
               <h3 className="mt-4 text-base font-bold text-white">{stage.title}</h3>
               <span className={`mt-1 inline-block text-xs font-semibold ${style.text}`}>Level {stage.level}</span>

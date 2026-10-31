@@ -1,83 +1,33 @@
-export type LevelType = 'Pemula' | 'Junior' | 'Mid-Level' | 'Senior';
+import type { BaseModule, ModuleItem } from './types';
+import { TRACKS, getTrack } from './tracks';
+import { AI_ENRICHMENTS } from './enrichments-ai';
+import { DASAR_MODULES } from './modules-dasar';
+import { ALGORITMA_MODULES } from './modules-algoritma';
+import { BAHASA_MODULES } from './modules-bahasa';
+import { KEAMANAN_MODULES } from './modules-keamanan';
 
-export interface SubTopic {
-  id: string;
-  title: string;
-  casualExplanation: string;
-}
+export type {
+  LevelType,
+  TrackId,
+  SubTopic,
+  Quiz,
+  CodeExample,
+  HowItWorksStep,
+  VibeWarning,
+  BaseModule,
+  ModuleItem,
+  StageInfo,
+  OutcomeInfo,
+  TrackInfo
+} from './types';
+export { getQuizzes, getExamples } from './types';
+export { TRACKS, getTrack } from './tracks';
 
-export interface Quiz {
-  question: string;
-  options: string[];
-  correctIndex: number;
-  explanation: string;
-}
+// Kompatibilitas dengan versi lama (jalur AI Engineer).
+export const LEARNING_STAGES = getTrack('ai').stages;
+export const FINAL_OUTCOMES = getTrack('ai').outcomes;
 
-export interface ModuleItem {
-  id: number;
-  stage: number;
-  stageLabel: string;
-  level: LevelType;
-  title: string;
-  subtitle: string;
-  accentColor: string;
-  iconName: string;
-  analogyTitle: string;
-  analogyContent: string;
-  whyItMatters: string;
-  subTopics: SubTopic[];
-  codeSnippet: {
-    language: string;
-    title: string;
-    code: string;
-    takeaway: string;
-  };
-  quiz: Quiz;
-}
-
-export const LEARNING_STAGES = [
-  {
-    step: 1,
-    title: 'Pelajari dasar (1 - 3)',
-    level: 'Pemula',
-    description: 'Bangun pondasi logika matematika, bahasa Python, dan cara merapikan data mentah.'
-  },
-  {
-    step: 2,
-    title: 'Kuasai model AI (4 - 7)',
-    level: 'Junior - Mid',
-    description: 'Pahami cara mesin belajar dari data, jaringan saraf tiruan, NLP, hingga otak di balik LLM.'
-  },
-  {
-    step: 3,
-    title: 'Bangun aplikasi (8)',
-    level: 'Mid-Level',
-    description: 'Rakit AI Agent pintar yang bisa memakai tools dan menyelesaikan pekerjaan secara otomatis.'
-  },
-  {
-    step: 4,
-    title: 'Production & Best Practice',
-    level: 'Senior',
-    description: 'Deploy sistem AI ke server nyata yang aman, hemat biaya, cepat, dan siap dipakai ribuan user.'
-  }
-];
-
-export const FINAL_OUTCOMES = [
-  {
-    title: 'Mampu membangun solusi AI yang nyata',
-    description: 'Bukan cuma jago teori di atas kertas, tapi bisa bikin aplikasi AI fungsional dari nol sampai jalan.'
-  },
-  {
-    title: 'Siap bekerja sebagai AI Engineer',
-    description: 'Punya portofolio terstruktur dan pemahaman teknis dari hulu ke hilir yang dicari perusahaan.'
-  },
-  {
-    title: 'Memiliki kemampuan yang relevan untuk industri',
-    description: 'Menguasai stack modern seperti RAG, LLM, AI Agents, dan deployment yang dipakai industri saat ini.'
-  }
-];
-
-export const CURRICULUM_DATA: ModuleItem[] = [
+const AI_BASE_MODULES: BaseModule[] = [
   {
     id: 1,
     stage: 1,
@@ -744,3 +694,20 @@ const cekStokGudangTool = {
     }
   }
 ];
+
+const AI_MODULES: ModuleItem[] = AI_BASE_MODULES.map((item) => ({
+  ...item,
+  ...AI_ENRICHMENTS[item.id],
+  track: 'ai' as const
+}));
+
+/** Urutan jalur belajar yang disarankan: Dasar, Algoritma, Bahasa, Secure Coding, lalu AI. */
+export const CURRICULUM_DATA: ModuleItem[] = [
+  ...DASAR_MODULES,
+  ...ALGORITMA_MODULES,
+  ...BAHASA_MODULES,
+  ...KEAMANAN_MODULES,
+  ...AI_MODULES
+];
+
+export const TOTAL_TRACKS = TRACKS.length;

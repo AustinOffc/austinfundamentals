@@ -15,3 +15,8 @@ body {
   background: #334155;
   border-radius: 9999px;
 }
+
+html[data-scroll-locked] body {
+  overflow: hidden;
+  padding-right: var(--scrollbar-gap, 0px);
+}

@@ -5,9 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AI Engineer Fundamentals',
+  title: 'RVC - Ruang Vibe Coders',
   description:
-    'Fundamental pertama yang harus dipelajari untuk menjadi AI Engineer. Kuasai dasar-dasarnya dulu sebelum membangun solusi AI yang nyata!'
+    'Ruang Vibe Coders: belajar bareng, bukan cuma bisa menyuruh AI, tapi paham apa yang ada di baliknya. Dasar programmer, algoritma, bahasa pemrograman, secure coding, dan AI Engineer.'
 };
 
 export const viewport: Viewport = {

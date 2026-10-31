@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { ArrowDown, Sparkles } from 'lucide-react';
+import { CURRICULUM_DATA, TRACKS } from '@/data/curriculum';
 
 const STATS = [
-  { value: '9', label: 'Modul Lengkap' },
-  { value: '4', label: 'Tahapan Karir' },
+  { value: String(CURRICULUM_DATA.length), label: 'Modul Lengkap' },
+  { value: String(TRACKS.length), label: 'Jalur Belajar' },
   { value: 'Santai', label: 'Bahasa Santai & Analogi' }
 ];
 
@@ -21,7 +22,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-xs font-medium text-purple-300"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Platform Belajar Interaktif
+          RVC · Ruang Vibe Coders
         </motion.span>
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
@@ -29,9 +30,9 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-6 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl"
         >
-          Fundamental Pertama yang Harus Dipelajari Untuk Menjadi{' '}
+          Pahami Dulu Kodenya, Baru Bangun dengan AI Menjadi{' '}
           <span className="bg-gradient-to-r from-yellow-300 via-orange-400 to-fuchsia-500 bg-clip-text text-transparent">
-            AI Engineer
+            Programmer & AI Engineer
           </span>
         </motion.h1>
         <motion.p
@@ -40,7 +41,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mx-auto mt-5 max-w-2xl text-base text-slate-400 sm:text-lg"
         >
-          Kuasai dasar-dasarnya dulu sebelum membangun solusi AI yang nyata!
+          Belajar bareng, bukan cuma bisa menyuruh AI, tapi paham apa yang ada di baliknya: dasar programmer, algoritma, semua bahasa, secure coding, sampai AI Engineer.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import type { ModuleItem } from '@/data/curriculum';
+import { getTrack, type ModuleItem } from '@/data/curriculum';
 import { MODULE_ICONS } from '@/lib/icons';
 
 interface ModuleCardProps {
@@ -11,11 +11,12 @@ interface ModuleCardProps {
   progress: number;
   checked: Record<string, boolean>;
   quizCorrect: boolean;
+  showTrack?: boolean;
   onToggle: (topicId: string) => void;
   onOpen: () => void;
 }
 
-export default function ModuleCard({ item, index, progress, checked, quizCorrect, onToggle, onOpen }: ModuleCardProps) {
+export default function ModuleCard({ item, index, progress, checked, quizCorrect, showTrack = false, onToggle, onOpen }: ModuleCardProps) {
   const Icon = MODULE_ICONS[item.iconName];
 
   return (
@@ -37,6 +38,11 @@ export default function ModuleCard({ item, index, progress, checked, quizCorrect
             <span className="rounded-full border border-slate-700 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-300">
               {item.level}
             </span>
+            {showTrack && (
+              <span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-slate-300">
+                {getTrack(item.track).label}
+              </span>
+            )}
             {quizCorrect && (
               <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
                 Kuis Lulus

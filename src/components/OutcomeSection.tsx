@@ -2,22 +2,22 @@
 
 import { motion } from 'framer-motion';
 import { CheckCircle2, Trophy } from 'lucide-react';
-import { FINAL_OUTCOMES } from '@/data/curriculum';
+import type { TrackInfo } from '@/data/curriculum';
 
-export default function OutcomeSection() {
+export default function OutcomeSection({ track }: { track: TrackInfo }) {
   return (
     <section id="hasil" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-16">
       <div className="mb-10 text-center">
         <span className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-400/15">
           <Trophy className="h-6 w-6 text-yellow-300" />
         </span>
-        <h2 className="text-2xl font-bold text-white sm:text-3xl">Hasil Akhir</h2>
-        <p className="mt-2 text-slate-400">Target yang kamu capai setelah menyelesaikan seluruh tahapan.</p>
+        <h2 className="text-2xl font-bold text-white sm:text-3xl">Hasil Akhir: {track.label}</h2>
+        <p className="mt-2 text-slate-400">Target yang kamu capai setelah menyelesaikan seluruh tahapan jalur ini.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        {FINAL_OUTCOMES.map((outcome, index) => (
+        {track.outcomes.map((outcome, index) => (
           <motion.div
-            key={outcome.title}
+            key={`${track.id}-${outcome.title}`}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}

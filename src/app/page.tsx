@@ -1,23 +1,26 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, SearchX } from 'lucide-react';
-import { CURRICULUM_DATA, type LevelType } from '@/data/curriculum';
+import { CURRICULUM_DATA, getTrack, getQuizzes, type LevelType, type TrackId } from '@/data/curriculum';
 import { useProgress } from '@/hooks/useProgress';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/scrollLock';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import StageRoadmap from '@/components/StageRoadmap';
 import ModuleCard from '@/components/ModuleCard';
 import ModuleDetailModal from '@/components/ModuleDetailModal';
 import OutcomeSection from '@/components/OutcomeSection';
+import TrackSelector from '@/components/TrackSelector';
+import VibeCodingBanner from '@/components/VibeCodingBanner';
 import Footer from '@/components/Footer';
 
 type FilterValue = LevelType | 'all';
 
 const FILTERS: { label: string; value: FilterValue }[] = [
   { label: 'Semua Level', value: 'all' },
-  { label: '1. Pemula (Nol Putul)', value: 'Pemula' },
+  { label: '1. Pemula (Dari Nol)', value: 'Pemula' },
   { label: '2. Junior', value: 'Junior' },
   { label: '3. Mid-Level', value: 'Mid-Level' },
   { label: '4. Senior', value: 'Senior' }
@@ -25,6 +28,7 @@ const FILTERS: { label: string; value: FilterValue }[] = [
 
 export default function Home() {
   const progress = useProgress();
+  const [track, setTrack] = useState<TrackId>('dasar');
   const [filter, setFilter] = useState<FilterValue>('all');
   const [query, setQuery] = useState('');
   const [openId, setOpenId] = useState<number | null>(null);
@@ -32,21 +36,55 @@ export default function Home() {
   const filtered = useMemo(() => {
     const keyword = query.trim().toLowerCase();
     return CURRICULUM_DATA.filter((item) => {
+      // Saat mencari, cari di semua jalur. Jika tidak, tampilkan jalur yang dipilih.
+      if (!keyword && item.track !== track) return false;
       if (filter !== 'all' && item.level !== filter) return false;
       if (!keyword) return true;
       const haystack = [
         item.title,
         item.subtitle,
         ...item.subTopics.map((topic) => topic.title),
-        ...item.subTopics.map((topic) => topic.casualExplanation)
+        ...item.subTopics.map((topic) => topic.casualExplanation),
+        ...(item.howItWorks ?? []).map((step) => step.title),
+        ...(item.moreExamples ?? []).map((example) => example.title)
       ]
         .join(' ')
         .toLowerCase();
       return haystack.includes(keyword);
     });
-  }, [filter, query]);
+  }, [filter, query, track]);
 
   const closeModal = useCallback(() => setOpenId(null), []);
+
+  const moduleCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    CURRICULUM_DATA.forEach((item) => {
+      counts[item.track] = (counts[item.track] ?? 0) + 1;
+    });
+    return counts;
+  }, []);
+
+  const activeTrack = getTrack(track);
+  const searching = query.trim().length > 0;
+
+  const goToTrack = useCallback((id: TrackId) => {
+    setTrack(id);
+    setQuery('');
+    setFilter('all');
+    window.requestAnimationFrame(() => {
+      document.getElementById('kurikulum')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }, []);
+
+  useEffect(() => {
+    unlockBodyScroll();
+    return () => unlockBodyScroll();
+  }, []);
+
+  useEffect(() => {
+    if (openId === null) return;
+    return lockBodyScroll();
+  }, [openId]);
 
   const openItem = CURRICULUM_DATA.find((item) => item.id === openId) ?? null;
 
@@ -55,10 +93,27 @@ export default function Home() {
       <Navbar percent={progress.globalPercent} onReset={progress.resetProgress} />
       <main>
         <Hero />
+        <VibeCodingBanner onGoSecure={() => goToTrack('keamanan')} />
         <section id="kurikulum" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-12">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">Kurikulum Lengkap</h2>
-            <p className="mt-2 text-slate-400">Centang materi yang sudah kamu pelajari dan uji pemahamanmu.</p>
+            <p className="mt-2 text-slate-400">
+              Pilih jalur belajar, centang materi yang sudah kamu pelajari, dan uji pemahamanmu. Urutan yang disarankan: Jalur 1 sampai 5.
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <TrackSelector
+              active={track}
+              moduleCounts={moduleCounts}
+              percentFor={progress.trackPercent}
+              onSelect={(id) => {
+                setTrack(id);
+                setFilter('all');
+                setQuery('');
+              }}
+            />
+            <p className="mt-4 text-center text-sm text-slate-400">{activeTrack.description}</p>
           </div>
 
           <div className="mb-8 flex flex-col gap-4">
@@ -68,7 +123,7 @@ export default function Home() {
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Cari materi, misal: Python, RAG, Transformer, Kalkulus"
+                placeholder="Cari di semua jalur, misal: SQL injection, Big-O, Rust, RAG"
                 className="w-full rounded-full border border-slate-800 bg-slate-900/70 py-3 pl-11 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500/60 focus:outline-none"
               />
             </div>
@@ -90,6 +145,12 @@ export default function Home() {
             </div>
           </div>
 
+          {searching && (
+            <p className="mb-4 text-center text-xs text-slate-500">
+              Hasil pencarian dari semua jalur ({filtered.length} modul). Kosongkan kolom pencarian untuk kembali ke jalur {activeTrack.label}.
+            </p>
+          )}
+
           {filtered.length > 0 ? (
             <motion.div layout className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((item, index) => (
@@ -99,7 +160,8 @@ export default function Home() {
                   index={index}
                   progress={progress.moduleProgress(item)}
                   checked={progress.checked}
-                  quizCorrect={Boolean(progress.quiz[item.id]?.correct)}
+                  quizCorrect={progress.moduleQuizPassed(item)}
+                  showTrack={searching}
                   onToggle={progress.toggleTopic}
                   onOpen={() => setOpenId(item.id)}
                 />
@@ -112,8 +174,8 @@ export default function Home() {
             </div>
           )}
         </section>
-        <StageRoadmap />
-        <OutcomeSection />
+        <StageRoadmap track={activeTrack} />
+        <OutcomeSection track={activeTrack} />
       </main>
       <Footer />
 
@@ -123,10 +185,12 @@ export default function Home() {
             key={openItem.id}
             item={openItem}
             checked={progress.checked}
-            quizResult={progress.quiz[openItem.id]}
+            quizResults={progress.quiz}
             onToggle={progress.toggleTopic}
-            onAnswer={(selected) => progress.answerQuiz(openItem.id, selected, openItem.quiz.correctIndex)}
-            onRetry={() => progress.retryQuiz(openItem.id)}
+            onAnswer={(questionIndex, selected) =>
+              progress.answerQuiz(openItem.id, questionIndex, selected, getQuizzes(openItem)[questionIndex].correctIndex)
+            }
+            onRetry={(questionIndex) => progress.retryQuiz(openItem.id, questionIndex)}
             onClose={closeModal}
           />
         )}
