@@ -24,8 +24,8 @@ const POINTS = [
 export default function VibeCodingBanner({ onGoSecure }: { onGoSecure: () => void }) {
   return (
     <section id="vibe-coding" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-8">
-      <div className="rounded-3xl border border-rose-500/30 bg-gradient-to-br from-rose-500/10 via-slate-900/70 to-slate-900/70 p-6 sm:p-8">
-        <div className="flex items-center gap-2 text-rose-300">
+      <div className="rounded-3xl border border-danger-500/30 bg-gradient-to-br from-danger-500/10 via-slate-900/70 to-slate-900/70 p-6 sm:p-8">
+        <div className="flex items-center gap-2 text-danger-300">
           <AlertTriangle className="h-5 w-5" />
           <span className="text-xs font-bold uppercase tracking-wide">Penting untuk pemula & vibe coder</span>
         </div>
@@ -48,7 +48,7 @@ export default function VibeCodingBanner({ onGoSecure }: { onGoSecure: () => voi
                 transition={{ duration: 0.4, delay: index * 0.08 }}
                 className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4"
               >
-                <Icon className="h-5 w-5 text-rose-300" />
+                <Icon className="h-5 w-5 text-danger-300" />
                 <h3 className="mt-3 text-sm font-bold text-white">{point.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{point.description}</p>
               </motion.div>
@@ -58,7 +58,7 @@ export default function VibeCodingBanner({ onGoSecure }: { onGoSecure: () => voi
         <button
           type="button"
           onClick={onGoSecure}
-          className="mt-6 rounded-full bg-gradient-to-r from-rose-400 to-orange-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:opacity-90"
+          className="mt-6 rounded-full bg-gradient-to-r from-danger-400 to-warn-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:opacity-90"
         >
           Buka Jalur Secure Coding
         </button>

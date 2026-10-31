@@ -44,7 +44,7 @@ export default function ModuleCard({ item, index, progress, checked, quizCorrect
               </span>
             )}
             {quizCorrect && (
-              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+              <span className="rounded-full bg-success-500/15 px-2 py-0.5 text-[10px] font-semibold text-success-300">
                 Kuis Lulus
               </span>
             )}

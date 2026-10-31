@@ -46,9 +46,9 @@ const ALL_TABS: { id: TabId; label: string; icon: typeof BookOpen }[] = [
 ];
 
 const SEVERITY_STYLE = {
-  danger: { box: 'border-white/70 bg-white/10', icon: AlertOctagon, color: 'text-rose-400', label: 'Bahaya' },
-  warning: { box: 'border-dashed border-slate-400 bg-white/5', icon: AlertTriangle, color: 'text-amber-300', label: 'Waspada' },
-  info: { box: 'border-slate-700 bg-white/5', icon: Info, color: 'text-sky-300', label: 'Catatan' }
+  danger: { box: 'border-danger-500/40 bg-danger-500/10', icon: AlertOctagon, color: 'text-danger-400', label: 'Bahaya' },
+  warning: { box: 'border-warn-500/40 bg-warn-500/10', icon: AlertTriangle, color: 'text-warn-300', label: 'Waspada' },
+  info: { box: 'border-info-500/40 bg-info-500/10', icon: Info, color: 'text-info-300', label: 'Catatan' }
 } as const;
 
 export default function ModuleDetailModal({
@@ -175,7 +175,7 @@ export default function ModuleDetailModal({
               <div className="space-y-4">
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
                   <h3 className="flex items-center gap-2 text-base font-bold text-white">
-                    <Lightbulb className="h-5 w-5 text-yellow-300" />
+                    <Lightbulb className="h-5 w-5 text-warn-300" />
                     {item.analogyTitle}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-slate-300">{item.analogyContent}</p>
@@ -200,7 +200,7 @@ export default function ModuleDetailModal({
                           onClick={() => onToggle(topic.id)}
                           className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition ${
                             done
-                              ? 'bg-emerald-500/20 text-emerald-300'
+                              ? 'bg-success-500/20 text-success-300'
                               : 'border border-slate-700 text-slate-300 hover:border-slate-500'
                           }`}
                         >
@@ -265,7 +265,7 @@ export default function ModuleDetailModal({
                       onClick={handleCopy}
                       className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-slate-300 transition hover:bg-slate-800"
                     >
-                      {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copied ? <Check className="h-3.5 w-3.5 text-success-400" /> : <Copy className="h-3.5 w-3.5" />}
                       {copied ? 'Tersalin' : 'Copy Code'}
                     </button>
                   </div>
@@ -279,7 +279,7 @@ export default function ModuleDetailModal({
                       <Terminal className="h-3.5 w-3.5" />
                       Contoh Output
                     </div>
-                    <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-emerald-300 sm:text-sm">
+                    <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-success-300 sm:text-sm">
                       <code>{example.output}</code>
                     </pre>
                   </div>
@@ -313,7 +313,7 @@ export default function ModuleDetailModal({
                         {warning.problem}
                       </p>
                       <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                        <span className="font-semibold text-emerald-300">Solusi: </span>
+                        <span className="font-semibold text-success-300">Solusi: </span>
                         {warning.fix}
                       </p>
                     </div>
@@ -346,8 +346,8 @@ export default function ModuleDetailModal({
                           const isCorrect = optionIndex === quiz.correctIndex;
                           const isSelected = result?.selected === optionIndex;
                           let style = 'border-slate-700 bg-slate-950/60 text-slate-200 hover:border-slate-500';
-                          if (answered && isCorrect) style = 'border-emerald-500/60 bg-emerald-500/10 text-emerald-200';
-                          else if (answered && isSelected) style = 'border-dashed border-slate-400 bg-slate-950/40 text-slate-400 line-through';
+                          if (answered && isCorrect) style = 'border-success-500/60 bg-success-500/10 text-success-200';
+                          else if (answered && isSelected) style = 'border-danger-500/60 bg-danger-500/10 text-danger-200';
                           else if (answered) style = 'border-slate-800 bg-slate-950/40 text-slate-500';
                           return (
                             <button
@@ -361,8 +361,8 @@ export default function ModuleDetailModal({
                                 {String.fromCharCode(65 + optionIndex)}
                               </span>
                               <span className="flex-1">{option}</span>
-                              {answered && isCorrect && <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />}
-                              {answered && isSelected && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-rose-400" />}
+                              {answered && isCorrect && <CheckCircle2 className="h-5 w-5 shrink-0 text-success-400" />}
+                              {answered && isSelected && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-danger-400" />}
                             </button>
                           );
                         })}
@@ -372,7 +372,7 @@ export default function ModuleDetailModal({
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           className={`rounded-2xl border p-4 ${
-                            result.correct ? 'border-slate-400/60 bg-white/10' : 'border-dashed border-slate-500 bg-white/5'
+                            result.correct ? 'border-success-500/40 bg-success-500/10' : 'border-danger-500/40 bg-danger-500/10'
                           }`}
                         >
                           <p className="text-sm font-bold text-white">{result.correct ? 'Benar!' : 'Belum tepat.'}</p>

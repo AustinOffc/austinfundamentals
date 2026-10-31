@@ -44,7 +44,7 @@ export default function Navbar({ percent, onReset }: NavbarProps) {
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300 transition hover:border-rose-500/60 hover:text-rose-300"
+            className="flex items-center gap-1 rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300 transition hover:border-danger-500/60 hover:text-danger-300"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Reset Progress</span>

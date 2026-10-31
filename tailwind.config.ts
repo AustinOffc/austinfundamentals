@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import defaultColors from 'tailwindcss/colors';
 
 // Tema hitam-putih: semua palet warna dipetakan ke skala abu-abu netral.
 const neutral = {
@@ -35,7 +36,14 @@ const accentNames = [
   'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'
 ];
 
-const colors: Record<string, Record<number, string>> = { slate: neutral };
+// Warna semantik: hanya dipakai untuk peringatan, bahaya, catatan, dan status berhasil.
+const colors: Record<string, Record<number, string>> = {
+  slate: neutral,
+  danger: defaultColors.rose,
+  warn: defaultColors.amber,
+  info: defaultColors.sky,
+  success: defaultColors.emerald
+};
 accentNames.forEach((name) => {
   colors[name] = accent;
 });
