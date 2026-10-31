@@ -46,9 +46,9 @@ const ALL_TABS: { id: TabId; label: string; icon: typeof BookOpen }[] = [
 ];
 
 const SEVERITY_STYLE = {
-  danger: { box: 'border-rose-500/40 bg-rose-500/10', icon: AlertOctagon, color: 'text-rose-400', label: 'Bahaya' },
-  warning: { box: 'border-amber-500/40 bg-amber-500/10', icon: AlertTriangle, color: 'text-amber-300', label: 'Waspada' },
-  info: { box: 'border-sky-500/40 bg-sky-500/10', icon: Info, color: 'text-sky-300', label: 'Catatan' }
+  danger: { box: 'border-white/70 bg-white/10', icon: AlertOctagon, color: 'text-rose-400', label: 'Bahaya' },
+  warning: { box: 'border-dashed border-slate-400 bg-white/5', icon: AlertTriangle, color: 'text-amber-300', label: 'Waspada' },
+  info: { box: 'border-slate-700 bg-white/5', icon: Info, color: 'text-sky-300', label: 'Catatan' }
 } as const;
 
 export default function ModuleDetailModal({
@@ -347,7 +347,7 @@ export default function ModuleDetailModal({
                           const isSelected = result?.selected === optionIndex;
                           let style = 'border-slate-700 bg-slate-950/60 text-slate-200 hover:border-slate-500';
                           if (answered && isCorrect) style = 'border-emerald-500/60 bg-emerald-500/10 text-emerald-200';
-                          else if (answered && isSelected) style = 'border-rose-500/60 bg-rose-500/10 text-rose-200';
+                          else if (answered && isSelected) style = 'border-dashed border-slate-400 bg-slate-950/40 text-slate-400 line-through';
                           else if (answered) style = 'border-slate-800 bg-slate-950/40 text-slate-500';
                           return (
                             <button
@@ -372,7 +372,7 @@ export default function ModuleDetailModal({
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           className={`rounded-2xl border p-4 ${
-                            result.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-rose-500/40 bg-rose-500/10'
+                            result.correct ? 'border-slate-400/60 bg-white/10' : 'border-dashed border-slate-500 bg-white/5'
                           }`}
                         >
                           <p className="text-sm font-bold text-white">{result.correct ? 'Benar!' : 'Belum tepat.'}</p>

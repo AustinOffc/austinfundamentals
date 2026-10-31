@@ -3,8 +3,26 @@
 @tailwind utilities;
 
 body {
-  background-color: #020617;
-  color: #e2e8f0;
+  background-color: #0a0a0a;
+  color: #e5e5e5;
+  /* Teks tidak bisa diseleksi / ditekan lama untuk disalin */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Kolom input tetap bisa diketik dan diseleksi */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+img,
+svg {
+  -webkit-user-drag: none;
 }
 
 ::-webkit-scrollbar {
@@ -12,7 +30,7 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #404040;
   border-radius: 9999px;
 }
 
